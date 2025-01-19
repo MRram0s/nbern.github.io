@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AB1</title>
+    <title>ARENA BOLA 803</title>
     <style>
         div a img { visibility: hidden; }
         body { margin: 0; background-color: black; }
@@ -10,7 +10,7 @@
     <meta name="referrer" content="no-referrer" />
     <script src='https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/shaka-player.ui.min.js' crossorigin='anonymous'></script>
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/controls.min.css' crossorigin='anonymous' />
-    <center><b><p style="color:white; opacity:0.27;">TOKMUNG</b></p>
+    <center><b><p style="color:white; opacity:0.27;">BOSIPTV</b></p>
     <body>
     <style>
         /* Add your gradient styles here */
@@ -46,10 +46,11 @@
         }
     </style>
     <div data-shaka-player-container style='position:absolute;z-index: -1;top: 0;left: 0;width: 100%; height: 100%;object-fit: cover;'>
-        <video autoplay data-shaka-player poster="https://bosiptv.com/images/lgo.png" id='video' style='width:100%;height:100%;'></video>
+        <video autoplay data-shaka-player poster="https://i.ibb.co/Tr9tW9W/6278308353943914013-1.jpg" id='video' style='width:100%;height:100%;'></video>
     </div>
     <script>
         const manifestUri = "https://d1fk7kbmz4il3.cloudfront.net/CH1/masterCH1.mpd";
+
         async function getBearerToken() {
             try {
                 const response = await fetch('id.php');
@@ -61,6 +62,7 @@
                 return ''; // Return an empty string or handle the error as needed
             }
         }
+
         async function init() {
             const video = document.getElementById('video');
             const ui = video['ui'];
@@ -68,7 +70,9 @@
             const player = controls.getPlayer();
             window.player = player;
             window.ui = ui;
+
             const bearerToken = await getBearerToken();
+
             player.configure({
                 drm: {
                     "clearKeys": {
@@ -84,32 +88,40 @@
                     }
                 },
             });
+
             player.addEventListener('error', onPlayerErrorEvent);
             controls.addEventListener('error', onUIErrorEvent);
+
             try {
                 await player.load(manifestUri);
                 console.log('The video has now been loaded!');
             } catch (error) {
                 onPlayerError(error);
             }
+
             player.getNetworkingEngine().registerRequestFilter(function(type, request) {
                 if (type === shaka.net.NetworkingEngine.RequestType.SEGMENT) {
                     request.headers['authorization'] = `Bearer ${bearerToken}`;
                 }
             });
         }
+
         function onPlayerErrorEvent(errorEvent) {
             onPlayerError(errorEvent.detail);
         }
+
         function onPlayerError(error) {
             console.error('Error code', error.code, 'object', error);
         }
+
         function onUIErrorEvent(errorEvent) {
             onPlayerError(errorEvent.detail);
         }
+
         function initFailed(errorEvent) {
             console.error('Unable to load the UI library!');
         }
+
         document.addEventListener('shaka-ui-loaded', init);
         document.addEventListener('shaka-ui-load-failed', initFailed);
     </script>
